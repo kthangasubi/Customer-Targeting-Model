@@ -1,8 +1,3 @@
-#Run the three lines below only once.  Run them by removing '#'
-#install.packages('dplyr',       repos='https://cloud.r-project.org', dependencies=TRUE)
-#install.packages("fastDummies", repos='https://cloud.r-project.org', dependencies = TRUE)
-#install.packages("MASS",        repos='https://cloud.r-project.org', dependencies = TRUE)
-
 
 library(fastDummies)
 library(dplyr)
@@ -37,8 +32,7 @@ converted<-coil %>%
   )
 
 converted <- converted%>% relocate (MOSHOO, .after = SeqNum)
-#Do this for all variables starting with M that should not be converted using L3 format
-#Step 3 of HW
+
 converted <- converted%>% relocate (MOSTYP, .after = SeqNum)
 converted <- converted%>% relocate (MGEMLE, .after = SeqNum)
 converted <- converted%>% relocate (MOSTYP, .after = SeqNum)
@@ -47,11 +41,8 @@ converted <- converted%>% relocate (MGEMOM, .after = SeqNum)
 converted<-coil
 str(converted)
 
-# Are MGODRK:MSKC the first and last variables that need to be converted using L3 format?
-# In not, adjust
 converted<-converted %>% 
   mutate(across(MGODPR:MSKC, ~case_when(
-    #Changes have been made here to match the L3 Format
     .x == 0 ~ 0,
     .x == 1 ~ 5.5,
     .x == 2 ~ 17,
@@ -69,9 +60,6 @@ head(converted)
 table(converted$PWAPAR, coil$PWAPAR)
 
 converted <- dummy_cols(converted, select_columns = c('MOSTYP','MOSHOO'),remove_selected_columns = TRUE)
-#WHAT OTHER VARIABLE NEEDS TO BE CONVERTED TO BINARY.  CAN ADD TO LINE ABOVE ('MOSTYPE','Other Variable'...)
-#  AND RE-RUN PROGRAM FROM BEGINNING
-
 train <- converted %>% dplyr::sample_frac(0.70)
 test  <- dplyr::anti_join(converted, train, by = 'SeqNum')
 
@@ -96,7 +84,7 @@ varnames<-rownames(final)
 varnames<-varnames[2:length(varnames)]
 print(varnames)
 #Step 10 
-#Type in the variables produced by line above.  DO NOT SIMPLY USE THE VARIABLES IN LINE BELOW
+
 finalmodel<-glm(Resp ~ MSKB2+PAANHA+MGEMOM+MOSTYP_39+MOSTYP_34+MOSTYP_23+MAUT2+MAUT2+MRELGE+MOSHOO_9, family = 'binomial', data = train)
 ForMemo<-lm(Resp ~ MSKB2+PAANHA+MGEMOM+MOSTYP_39+MOSTYP_34+MOSTYP_23+MAUT2+MAUT2+MRELGE+MOSHOO_9, data = train)
 summary(ForMemo)
