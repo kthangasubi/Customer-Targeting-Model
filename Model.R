@@ -1,4 +1,3 @@
-
 library(fastDummies)
 library(dplyr)
 library(MASS)
@@ -107,7 +106,7 @@ View(cutpoint)
 head(test)
 tail(Perf)
 
-#Change pathname
+#Making a csv file
 write.csv(Perf,"C:/Users/kthan/Downloads/Perf.csv")
 
 #5% Marginal
@@ -121,7 +120,6 @@ Perf$Lift<-Perf$PctResp-Perf$PctProspect
 MaxLift<-Perf[Perf$Lift==max(Perf$Lift),]
 MaxLift
 
-#Open in Excel, if have time
 fm<-lm(Resp ~ MSKB2+PAANHA+MGEMOM+MOSTYP_39+MOSTYP_34+MOSTYP_23+MAUT2+MAUT2+MRELGE+MOSHOO_9, data = train)
 summary(fm)
 
